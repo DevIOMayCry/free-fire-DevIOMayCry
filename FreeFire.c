@@ -23,6 +23,7 @@ typedef struct {
 void adicionarItem(Item mochila[], int *total);
 void removerItem(Item mochila[], int *total);
 void listarItens(Item mochila[], int total);
+void buscarItem(Item mochila[], int total);
 void limparBuffer();
 
 // Enum CriterioOrdenacao:
@@ -59,6 +60,7 @@ int main() {
         printf("1. Adicionar Item (Loot)\n");
         printf("2. Remover Item\n");
         printf("3. Listar Itens na Mochila\n");
+        printf("4. Buscar item por nome.\n");
         printf("0. Sair\n");
         printf("----------------------------------------\n");
         printf("Escolha uma opcao: ");
@@ -77,6 +79,9 @@ int main() {
                 listarItens(mochila, total_itens);
                 printf("\nPressione Enter para continuar...");
                 getchar();
+                break;
+            case 4:
+                buscarItem(mochila, total_itens);
                 break;
             case 0:
                 printf("\nSaindo do inventario. Boa sorte na ilha!\n");
@@ -201,6 +206,36 @@ void listarItens(Item mochila[], int total) {
         printf("%-16s | %-16s | %d\n", mochila[i].nome, mochila[i].tipo, mochila[i].quantidade);
     }
     printf("----------------------------------------------------\n");
+}
+
+// buscarItem():
+// Realiza a busca de um item pelo nome e imprime seus detalhes.
+void buscarItem(Item mochila[], int total) {
+    char nomeBuscado[50];
+    printf("\nDigite o nome do item que deseja buscar: ");
+    fgets(nomeBuscado, 50, stdin);
+    nomeBuscado[strcspn(nomeBuscado, "\n")] = 0;
+
+    int encontrado = -1;
+    
+    for (int i = 0; i < total; i++) {
+        if (strcmp(mochila[i].nome, nomeBuscado) == 0) {
+            encontrado = i;
+            break;
+        }
+    }
+
+    if (encontrado != -1) {
+        printf("\n--- Detalhes do Item ---\n");
+        printf("Nome: %s\n", mochila[encontrado].nome);
+        printf("Estoque: %d\n", mochila[encontrado].quantidade);
+        printf("Tipo: %s\n", mochila[encontrado].tipo);
+    } else {
+        printf("\nResultado: Item \"%s\" nao existe na mochila.\n", nomeBuscado);
+    }
+
+    printf("\nPressione Enter para continuar...");
+    getchar();
 }
 
 // Função para limpar o lixo do teclado (Enter) que quebra o fgets
